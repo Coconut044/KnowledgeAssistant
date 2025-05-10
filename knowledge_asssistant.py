@@ -217,7 +217,7 @@ def main():
     api_key = "AIzaSyBJZ-jkAt1Nxzapa5Akljc_RKfuTd5qYA0"
     
     # Default dataset path
-    default_dataset_path = r"C:\Users\Nitya\Downloads\data\knowledge_assistant_larger_dataset"
+    default_dataset_path = r"knowledge_assistant_larger_dataset"
     
     # Process button
     if st.sidebar.button("Process Documents") or (not st.session_state.documents_processed):
