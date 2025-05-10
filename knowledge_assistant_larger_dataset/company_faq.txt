@@ -1,0 +1,29 @@
+Q: What are your customer support hours?
+A: Our customer support is available from 9 AM to 6 PM, Monday to Friday.
+
+Q: How do I reset my password?
+A: Click "Forgot Password" on the login page and follow the instructions sent to your email.
+
+Q: Can I change my shipping address after placing an order?
+A: Yes, you can change your shipping address within 2 hours of placing the order by contacting support.
+
+Q: What payment methods are accepted?
+A: We accept credit cards, debit cards, PayPal, and UPI.
+
+Q: Is there a warranty on products?
+A: Yes, most of our products come with a 1-year manufacturer warranty.
+
+Q: How can I track my order?
+A: You will receive a tracking link via email once your order is shipped.
+
+Q: Can I cancel my subscription anytime?
+A: Yes, subscriptions can be canceled at any time from your account settings.
+
+Q: Do you offer student discounts?
+A: Yes, students can avail a 10% discount by verifying their ID.
+
+Q: What happens if I receive a damaged product?
+A: Please report it within 48 hours for a free replacement or full refund.
+
+Q: How long does delivery take?
+A: Standard delivery takes 3–5 business days.
