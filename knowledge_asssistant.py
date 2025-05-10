@@ -5,6 +5,7 @@ import tempfile
 import faiss
 import pickle
 import google.generativeai as genai
+import torch
 
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
@@ -126,7 +127,10 @@ def rag_llm_tool(query, relevant_texts, api_key):
 # ========================
 def calculator_tool(expression: str):
     try:
-        result = eval(expression)
+        # Using a safer eval approach
+        # Remove any non-mathematical expressions for security
+        sanitized_expr = re.sub(r'[^0-9+\-*/().\s]', '', expression)
+        result = eval(sanitized_expr)
         return f"Result of calculation: {result}"
     except Exception as e:
         return f"Error in calculation: {e}"
@@ -154,6 +158,28 @@ def route_query(query, model, index, texts, api_key):
         return rag_llm_tool(query, top_chunks, api_key)
 
 # ========================
+# Initialize Sentence Transformer Model
+# ========================
+@st.cache_resource
+def load_sentence_transformer(model_name="paraphrase-albert-small-v2"):
+    try:
+        # Explicitly set device to CPU
+        device = "cpu"
+        print(f"Loading SentenceTransformer model '{model_name}' on {device}")
+        model = SentenceTransformer(model_name, device=device)
+        return model
+    except Exception as e:
+        st.error(f"Error loading SentenceTransformer model: {e}")
+        # Fallback to a simpler model if available
+        try:
+            print("Attempting to load fallback model 'all-MiniLM-L6-v2'")
+            model = SentenceTransformer("all-MiniLM-L6-v2", device=device)
+            return model
+        except Exception as e2:
+            st.error(f"Failed to load fallback model: {e2}")
+            return None
+
+# ========================
 # Streamlit UI
 # ========================
 def main():
@@ -161,7 +187,11 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = []
     if "model" not in st.session_state:
-        st.session_state.model = SentenceTransformer("paraphrase-albert-small-v2")
+        # Load model with caching to avoid reloading on each rerun
+        st.session_state.model = load_sentence_transformer()
+        if not st.session_state.model:
+            st.error("Failed to initialize the SentenceTransformer model. The app cannot function properly.")
+            st.stop()
     if "documents_processed" not in st.session_state:
         st.session_state.documents_processed = False
     if "dataset_choice" not in st.session_state:
@@ -216,8 +246,13 @@ def main():
     # Fixed API key from your original code
     api_key = "AIzaSyBJZ-jkAt1Nxzapa5Akljc_RKfuTd5qYA0"
     
-    # Default dataset path
-    default_dataset_path = r"knowledge_assistant_larger_dataset"
+    # Default dataset path - update this to a more flexible path
+    default_dataset_path = os.path.join(os.getcwd(), r"knowledge_assistant_larger_dataset")
+    if not os.path.exists(default_dataset_path):
+        os.makedirs(default_dataset_path)
+        # Create a sample file if the directory is empty
+        with open(os.path.join(default_dataset_path, "sample.txt"), "w") as f:
+            f.write("This is a sample document for the Knowledge Assistant.")
     
     # Process button
     if st.sidebar.button("Process Documents") or (not st.session_state.documents_processed):
@@ -255,6 +290,11 @@ def main():
             chunks = load_and_chunk_documents(folder_path=folder_to_use, file_paths=files_to_use)
             
             if chunks:
+                # Check if model is available
+                if not st.session_state.model:
+                    st.error("SentenceTransformer model is not available. Cannot process documents.")
+                    return
+                
                 index, texts, embeddings = build_faiss_index(chunks, st.session_state.model)
                 
                 st.session_state.index = index
