@@ -84,34 +84,34 @@ A smart, context-aware Q&A chatbot powered by <strong>FAISS</strong>, <strong>La
 
 ## 🛠 Setup Instructions
 
-# 1. Clone the Repository
+## 1. Clone the Repository
 git clone https://github.com/yourusername/knowledge-assistant.git
 cd knowledge-assistant
 
-# 2. (Optional) Create and Activate Virtual Environment
+## 2. (Optional) Create and Activate Virtual Environment
 python -m venv venv
-# On Windows:
+## On Windows:
 venv\Scripts\activate
-# On macOS/Linux:
+## On macOS/Linux:
 source venv/bin/activate
 
-# 3. Install Dependencies
+## 3. Install Dependencies
 pip install -r requirements.txt
 
-# 4. Get Your Gemini API Key
-# Visit: https://aistudio.google.com/app/apikey
-# Sign in and generate your API key.
+## 4. Get Your Gemini API Key
+ Visit: https://aistudio.google.com/app/apikey
+#Sign in and generate your API key.
 
-# 5. Add Your Gemini API Key
-# Open app.py and insert:
-# import google.generativeai as genai
-# genai.configure(api_key="YOUR_API_KEY_HERE")
+## 5. Add Your Gemini API Key
+ Open app.py and insert:
+ import google.generativeai as genai
+ genai.configure(api_key="YOUR_API_KEY_HERE")
 
-# 6. Run the Streamlit App
+## 6. Run the Streamlit App
 streamlit run app.py
 
-# 7. Open in Browser:
-# Navigate to http://localhost:8501
+## 7. Open in Browser:
+ Navigate to http://localhost:8501
 
 
 
